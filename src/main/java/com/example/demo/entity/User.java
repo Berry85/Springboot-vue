@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 
+	@JsonIgnore
 	public Boolean getEnable() {
 		return enable;
 	}
@@ -40,6 +42,7 @@ public class User implements UserDetails {
 		this.enable = enable;
 	}
 
+	@JsonIgnore
 	public Boolean getLocked() {
 		return locked;
 	}
@@ -58,13 +61,14 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities=new ArrayList<>();
-		for (Role role:roles){
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		for (Role role : roles) {
 			authorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
 		return authorities;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getPassword() {
 		return password;

@@ -8,4 +8,7 @@ import java.util.List;
 @Mapper
 public interface MenuMapper {
 	List<Menu> getAllMenus();
+
+	//	根据用户id获取角色
+	int getRolesByUserId(Integer id);
 }

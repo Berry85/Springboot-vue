@@ -2,14 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace = "com.example.demo.mapper.UserMapper">
-	<select id = "loadUserByUsername" resultType="com.example.demo.entity.User">
+	<resultMap id = "BaseResultMap" type = "com.example.demo.entity.User">
+		<id column = "id" property = "id" jdbcType = "INTEGER"/>
+		<result column = "username" property = "username" jdbcType = "VARCHAR"/>
+		<result column = "password" property = "password" jdbcType = "VARCHAR"/>
+		<result column = "enable" property = "enable" jdbcType = "INTEGER"/>
+		<result column = "locked" property = "locked" jdbcType = "INTEGER"/>
+	</resultMap>
+	<resultMap id = "lazyLoadRoles" type = "com.example.demo.entity.User" extends = "BaseResultMap">
+		<collection property = "roles" ofType = "com.example.demo.entity.Role"
+					select = "com.example.demo.mapper.MenuMapper.getRolesByUserId"
+					column = "id"/>
+	</resultMap>
+	<resultMap id = "eagerLoadRoles" type = "com.example.demo.entity.User" extends = "BaseResultMap">
+		<collection property = "roles" ofType = "com.example.demo.entity.Role">
+			<id column = "rid" property = "id" jdbcType = "INTEGER"/>
+			<result column = "r_name" property = "name" jdbcType = "VARCHAR"/>
+			<result column = "r_name_zh" property = "name_zh" jdbcType = "VARCHAR"/>
+		</collection>
+	</resultMap>
+	<select id = "loadUserByUsername" resultType = "com.example.demo.entity.User">
 		SELECT * FROM user
 		WHERE `username`=#{username}
 	</select>
 
-	<select id = "getUserRolesByUid" resultType="com.example.demo.entity.Role">
+	<select id = "getUserRolesByUid" resultType = "com.example.demo.entity.Role">
 		SELECT * FROM user_role ur, role r
 		WHERE r.`id`=ur.`rid`
 		AND ur.`uid`=#{id}
 	</select>
+	<insert id = "insertUser">
+		INSERT INTO user
+		SET username=#{username}, password=#{password}
+	</insert>
+
+
 </mapper>
