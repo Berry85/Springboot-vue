@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.example.demo.mapper.MenuMapper">
+	<resultMap id = "BaseResultMap" type = "com.example.demo.entity.Menu">
+		<id column = "id" property = "id" jdbcType = "INTEGER"/>
+		<result column = "url" property = "url" jdbcType = "VARCHAR"/>
+		<result column = "path" property = "path" jdbcType = "VARCHAR"/>
+		<result column = "component" property = "component" javaType = "java.lang.Object"/>
+		<result column = "parent_id" property = "parent_id" jdbcType = "INTEGER"/>
+		<result column = "name" property = "name" jdbcType = "VARCHAR"/>
+		<result column = "iconCls" property = "iconCls" jdbcType = "VARCHAR"/>
+		<result column = "enable" property = "enable" jdbcType = "INTEGER"/>
+		<association property = "meta" javaType = "com.example.demo.entity.MenuMeta">
+			<result column = "keepAlive" property = "keepAlive" jdbcType = "INTEGER"/>
+			<result column = "requireAuth" property = "requireAuth" jdbcType = "INTEGER"/>
+		</association>
+		<collection property = "roles" ofType = "com.example.demo.entity.Role">
+			<id column = "rid" property = "id"/>
+			<result column = "r_name" property = "name"/>
+			<result column = "r_name_zh" property = "name_zh"/>
+		</collection>
+		<collection property = "children" ofType = "com.example.demo.entity.Menu">
+			<id column = "id2" property = "id" jdbcType = "INTEGER"/>
+			<result column = "url2" property = "url" jdbcType = "VARCHAR"/>
+			<result column = "path2" property = "path" jdbcType = "VARCHAR"/>
+			<result column = "component2" property = "component" javaType = "java.lang.Object"/>
+			<result column = "parent_id2" property = "parent_id" jdbcType = "INTEGER"/>
+			<result column = "name2" property = "name" jdbcType = "VARCHAR"/>
+			<result column = "iconCls2" property = "iconCls" jdbcType = "VARCHAR"/>
+			<result column = "enable2" property = "enable" jdbcType = "INTEGER"/>
+			<association property = "meta" javaType = "com.example.demo.entity.MenuMeta">
+				<result column = "keepAlive2" property = "keepAlive" jdbcType = "INTEGER"/>
+				<result column = "requireAuth2" property = "requireAuth" jdbcType = "INTEGER"/>
+			</association>
+			<collection property = "children" ofType = "com.example.demo.entity.Menu">
+				<id column = "id3" property = "id" jdbcType = "INTEGER"/>
+				<result column = "name3" property = "name" jdbcType = "VARCHAR"/>
+			</collection>
+		</collection>
+	</resultMap>
+	<select id = "getAllMenus" resultMap = "BaseResultMap">
+		SELECT m.*, r.`id` AS rid, r.`name` AS r_name, r.`name_zh` AS r_name_zh
+		FROM menu m
+		LEFT JOIN menu_role mr ON m.`id`=mr.`mid`
+		LEFT JOIN role r ON mr.`rid`=r.`id`
+	</select>
+</mapper>
