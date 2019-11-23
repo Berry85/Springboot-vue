@@ -16,10 +16,7 @@ public interface UserMapper {
 	//	新建账户
 	int insertUser(@Param("username") String username, @Param("password") String password);
 
-	//	修改密码
-	int updateUserPassword(@Param("password") String password);
-
-	//更新用户信息
+	//	更新账户内容
 	int updateUser(User user);
 
 	//	根据关键字查找用户
@@ -29,7 +26,7 @@ public interface UserMapper {
 	int deleteRoleByUserId(Integer id);
 
 	//	为用户添加角色
-	int addRolesForUser(@Param("UserId") Integer userId, @Param("rids") Integer[] rids);
+	int addRolesForUser(@Param("userId") Integer userId, @Param("roleId") Integer rid);
 
 	//	根据用户id获取用户信息
 	User getUserById(Integer id);

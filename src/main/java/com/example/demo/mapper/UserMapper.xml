@@ -7,7 +7,8 @@
 		<result column = "username" property = "username" jdbcType = "VARCHAR"/>
 		<result column = "password" property = "password" jdbcType = "VARCHAR"/>
 		<result column = "enable" property = "enable" jdbcType = "INTEGER"/>
-		<result column = "locked" property = "locked" jdbcType = "INTEGER"/>
+		<result column = "name" property = "name" jdbcType = "VARCHAR"/>
+		<result column = "phone" property = "phone" jdbcType = "INTEGER"/>
 	</resultMap>
 	<resultMap id = "lazyLoadRoles" type = "com.example.demo.entity.User" extends = "BaseResultMap">
 		<collection property = "roles" ofType = "com.example.demo.entity.Role"
@@ -31,10 +32,89 @@
 		WHERE r.`id`=ur.`rid`
 		AND ur.`uid`=#{id}
 	</select>
+	<!--	//	新建账户-->
 	<insert id = "insertUser">
 		INSERT INTO user
 		SET username=#{username}, password=#{password}
 	</insert>
+	<!--	//	更新账户内容-->
+	<update id = "updateUserPassword">
+		UPDATE user
+		<set>
+			<if test = "password!=null">
+				password=#{password,jdbcType="VARCHAR"},
+			</if>
+			<if test = "name!=null">
+				name=#{name,jdbcType="VARCHAR"},
+			</if>
+			<if test = "phone!=null">
+				phone=#{phone,jdbcType="INTEGER"},
+			</if>
+			<if test = "enable!=null">
+				enable=#{enable,jdbcType="INTEGER"},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<!--	//	根据关键字查找用户-->
+	<!--	List<User> getUserByKeywords(@Param("keywords") String keywords);-->
+	<select id = "getUserByKeywords" resultMap = "eagerLoadRoles">
+		SELECT
+		u.*,
+		`r`.`id` AS `rid`,
+		`r`.`name` AS `r_name`,
+		`r`.`name_zh` AS `r_name_zh`
+		FROM
+		(
+		( `user` `u` LEFT JOIN `user_role` `ur` ON ( `u`.`id` = `ur`.`uid` ) )
+		LEFT JOIN `role` `r` ON ( `ur`.`rid` = `r`.`id` )
+		)
+		WHERE u.`id` NOT IN (
+		SELECT ur.`uid`
+		FROM user_role ur, role r
+		WHERE
+		ur.`rid` = r.`id`
+		AND r.`name_zh` = '系统管理员'
+		AND r.`name_zh` = '数据库管理员')
+		<if test = "keywords!='all' and keywords!=''">
+			AND u.`name` LIKE CONCAT('%',#{keywords},'%')
+		</if>
+		ORDER BY u.`id` limit 10
+	</select>
 
+	<!--	//	删除用户角色-->
+	<!--	int deleteRoleByUserId(Integer id);-->
+	<delete id = "deleteRoleByUserId" parameterType = "INTEGER">
+		DELETE FROM user_role ur
+		WHERE rid=#{rid}
+	</delete>
 
+	<!--	//	为用户添加角色-->
+	<!--	int addRolesForUser(@Param("userId") Integer userId,
+		@Param("roleId") Integer[] rids);-->
+	<insert id = "addRolesForUser">
+		INSERT INTO user_role(`uid`,`rid`) VALUES
+		(#{userId},#{roleId})
+	</insert>
+
+	<!--	//	根据用户id获取用户信息-->
+	<!--	User getUserById(Integer id);-->
+	<select id = "getUserById" resultMap = "eagerLoadRoles">
+		SELECT u.*, `r`.`id` AS `rid`,
+		`r`.`name` AS `r_name`,
+		`r`.`name_zh` AS `r_name_zh`
+		FROM ((`user` `u` LEFT JOIN `user_role` `ur` ON
+		((`u`.`id`=`ur`.`uid`)))
+		LEFT JOIN `role` `r` ON ((`ur`.`rid`=`r`.`id`)))
+		WHERE u.`id`=#{id}
+	</select>
+
+	<!--	//	获取所有用户信息-->
+	<!--	List<User> getAllUser(@Param("currentId") Integer currentId);-->
+	<select id = "getAllUser" resultType = "com.example.demo.entity.User">
+		SELECT * FROM user
+		<if test = "currentId!=null">
+			WHERE id!={currentId}
+		</if>
+	</select>
 </mapper>
