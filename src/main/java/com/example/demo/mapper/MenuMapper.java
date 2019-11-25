@@ -10,5 +10,11 @@ public interface MenuMapper {
 	List<Menu> getAllMenus();
 
 	//	根据用户id获取角色
-	int getRolesByUserId(Integer id);
+	List<Menu> getMenuByUserId(Integer id);
+
+	//	menutree
+	List<Menu> menuTree();
+
+	List<Integer> getMenusByRoleId(Integer rid);
 }
+

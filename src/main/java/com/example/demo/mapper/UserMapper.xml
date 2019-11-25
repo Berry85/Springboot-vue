@@ -117,4 +117,15 @@
 			WHERE id!={currentId}
 		</if>
 	</select>
+
+	<select id = "getAllLandlord" resultMap = "BaseResultMap">
+		SELECT u.*
+		FROM user u, user_role ur
+		WHERE u.`id`=ur.`uid` AND ur.`rid`=4
+	</select>
+	<select id = "getAllTenant" resultMap = "BaseResultMap">
+		SELECT u.*
+		FROM user u, user_role ur
+		WHERE u.`id`=ur.`uid` AND ur.`rid`=3
+	</select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.common.UserUtils;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,6 @@ public class UserService implements UserDetailsService {
 	}
 
 	//	更新账户内容
-
 	public int updateUser(User user) {
 		return userMapper.updateUser(user);
 	}
@@ -58,22 +56,34 @@ public class UserService implements UserDetailsService {
 
 	//	为用户添加角色，要先删除原来角色表的角色
 	public int updateRolesForUser(Integer userId, Integer rid) {
-//		int i = userMapper.deleteRoleByUserId(userId);
+		int i = userMapper.deleteRoleByUserId(userId);
+		return userMapper.addRolesForUser(userId, rid);
+	}
+
+	//	新增用户角色
+	public int addRolesForUser(Integer userId, Integer rid) {
 		return userMapper.addRolesForUser(userId, rid);
 	}
 
 	//	根据用户id获取用户信息
 	public User getUserById(Integer id) {
+//		return userMapper.getUserById(UserUtils.getCurrentUser().getId());
 		return userMapper.getUserById(id);
 	}
 
-	public List<User> getAllHrExceptAdmin() {
-		return userMapper.getAllUser(UserUtils.getCurrentUser().getId());
+	//	获取所有用户信息
+	public List<User> getAllUser() {
+		return userMapper.getAllUser(null);
 	}
 
-	//	获取所有用户信息
-	public List<User> getAllUser(Integer currentId) {
-		return userMapper.getAllUser(null);
+	//	获取所有房东
+	public List<User> getAllLandlord() {
+		return userMapper.getAllLandlord();
+	}
+
+	//  获取所有租客
+	public List<User> getAllTenant() {
+		return userMapper.getAllTenant();
 	}
 
 }

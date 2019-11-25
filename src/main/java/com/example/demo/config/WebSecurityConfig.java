@@ -19,7 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/index.html", "/static/***", "/login_page", "/system/basic/**");
+		web.ignoring().antMatchers("/index.html", "/static/***", "/login_page", "/config/**");
 	}
 
 	@Override
@@ -110,7 +112,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				})
 				.permitAll()
 				.and()
-				.logout().permitAll()
+				.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessHandler(new LogoutSuccessHandler() {
+					@Override
+					public void onLogoutSuccess(HttpServletRequest req,
+												HttpServletResponse resp,
+												Authentication auth)
+							throws IOException, ServletException {
+						resp.setContentType("application/json;charset=UTF-8");
+						RespBean respBean = RespBean.ok("注销成功");
+						ObjectMapper om = new ObjectMapper();
+						PrintWriter out = resp.getWriter();
+						out.write(om.writeValueAsString(respBean));
+						out.flush();
+						out.close();
+					}
+				})
+				.permitAll()
 				.and().csrf().disable()
 				.exceptionHandling().accessDeniedHandler(deniedHandler);
 	}

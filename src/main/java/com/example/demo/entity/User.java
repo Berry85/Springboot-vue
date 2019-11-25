@@ -16,9 +16,27 @@ public class User implements UserDetails {
 	private Boolean enable;
 	private Boolean locked;
 	private List<Role> roles;
+	private String name;
+	private Integer phone;
 
 	public Integer getId() {
 		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getPhone() {
+		return phone;
+	}
+
+	public void setPhone(Integer phone) {
+		this.phone = phone;
 	}
 
 	public void setId(Integer id) {
@@ -86,7 +104,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !locked;
 	}
 
 	@Override

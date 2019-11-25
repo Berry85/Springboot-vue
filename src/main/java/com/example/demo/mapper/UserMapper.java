@@ -33,5 +33,11 @@ public interface UserMapper {
 
 	//	获取所有用户信息
 	List<User> getAllUser(@Param("currentId") Integer currentId);
+
+	//	获取所有租客
+	List<User> getAllLandlord();
+
+	//获取所有房东
+	List<User> getAllTenant();
 }
 
