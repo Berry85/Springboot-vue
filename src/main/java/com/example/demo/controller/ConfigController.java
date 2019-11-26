@@ -54,7 +54,7 @@ public class ConfigController {
 		int i = userService.UserInsert(username, password);
 		if (i == 1) {
 			int id = userService.getUserId(username);
-			userService.addRolesForUser(id, 3);
+			userService.addRolesForUser(id, 4);
 			return RespBean.ok("房东注册成功");
 		} else if (i == -1) {
 			return RespBean.error("用户名重复，注册失败");

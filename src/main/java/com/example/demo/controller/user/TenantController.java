@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 //只有房客的访问
 @RestController
-@RequestMapping("/Tenant")
+@RequestMapping("/tenant")
 public class TenantController {
 	@Autowired
 	UserService userService;
@@ -22,7 +22,7 @@ public class TenantController {
 		return userService.getUserById(UserUtils.getCurrentUser().getId());
 	}
 
-	//跟新个人信息
+	//更新个人信息
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
 	public RespBean updateInfo(User user) {
 		if (userService.updateUser(user) == 1) {

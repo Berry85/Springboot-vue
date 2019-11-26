@@ -39,5 +39,8 @@ public interface UserMapper {
 
 	//获取所有房东
 	List<User> getAllTenant();
+
+	//	锁定账号
+	int lockedUser(Integer id);
 }
 

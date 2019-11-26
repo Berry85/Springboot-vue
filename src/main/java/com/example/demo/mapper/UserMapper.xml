@@ -38,7 +38,7 @@
 		SET username=#{username}, password=#{password}
 	</insert>
 	<!--	//	更新账户内容-->
-	<update id = "updateUserPassword">
+	<update id = "updateUser">
 		UPDATE user
 		<set>
 			<if test = "password!=null">
@@ -50,20 +50,14 @@
 			<if test = "phone!=null">
 				phone=#{phone,jdbcType="INTEGER"},
 			</if>
-			<if test = "enable!=null">
-				enable=#{enable,jdbcType="INTEGER"},
-			</if>
 		</set>
 		WHERE id=#{id}
 	</update>
 	<!--	//	根据关键字查找用户-->
 	<!--	List<User> getUserByKeywords(@Param("keywords") String keywords);-->
 	<select id = "getUserByKeywords" resultMap = "eagerLoadRoles">
-		SELECT
-		u.*,
-		`r`.`id` AS `rid`,
-		`r`.`name` AS `r_name`,
-		`r`.`name_zh` AS `r_name_zh`
+		SELECT u.*,`r`.`id` AS `rid`,
+		`r`.`name` AS `r_name`, `r`.`name_zh` AS `r_name_zh`
 		FROM
 		(
 		( `user` `u` LEFT JOIN `user_role` `ur` ON ( `u`.`id` = `ur`.`uid` ) )
@@ -93,7 +87,8 @@
 	<!--	int addRolesForUser(@Param("userId") Integer userId,
 		@Param("roleId") Integer[] rids);-->
 	<insert id = "addRolesForUser">
-		INSERT INTO user_role(`uid`,`rid`) VALUES
+		INSERT INTO user_role ( `uid`, `rid` )
+		VALUES
 		(#{userId},#{roleId})
 	</insert>
 
@@ -128,4 +123,14 @@
 		FROM user u, user_role ur
 		WHERE u.`id`=ur.`uid` AND ur.`rid`=3
 	</select>
+
+	<!--	//	锁定账号-->
+	<!--	int lockedUser(Integer id);-->
+	<update id = "lockedUser">
+		UPDATE USER
+		SET locked = !locked
+		WHERE
+		USER.`id` =#{id}
+	</update>
+
 </mapper>

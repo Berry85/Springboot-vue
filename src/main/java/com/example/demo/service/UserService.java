@@ -67,7 +67,6 @@ public class UserService implements UserDetailsService {
 
 	//	根据用户id获取用户信息
 	public User getUserById(Integer id) {
-//		return userMapper.getUserById(UserUtils.getCurrentUser().getId());
 		return userMapper.getUserById(id);
 	}
 
@@ -86,4 +85,8 @@ public class UserService implements UserDetailsService {
 		return userMapper.getAllTenant();
 	}
 
+	//  锁用户
+	public int lockedUser(Integer id) {
+		return userMapper.lockedUser(id);
+	}
 }
