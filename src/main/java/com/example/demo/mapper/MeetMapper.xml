@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.example.demo.mapper.MeetMapper">
+	<resultMap id = "BaseResultMap" type = "com.example.demo.entity.Meet">
+		<id column = "id" property = "id" jdbcType = "INTEGER"/>
+		<result column = "tid" property = "tid" jdbcType = "INTEGER"/>
+		<result column = "lid" property = "lid" jdbcType = "INTEGER"/>
+		<result column = "address" property = "address" jdbcType = "VARCHAR"/>
+		<result column = "time" property = "time" jdbcType = "DATE"/>
+	</resultMap>
+	<!--	//	学生申请会面时间地点-->
+	<!--	int Applymeet(@Param("meet") Meet meet, @Param("hid") Integer hid, @Param("tid") Integer tid);-->
+	<insert id = "Applymeet">
+		INSERT INTO meet(tid,lid,address,time)
+		VALUES (#{tid},
+		(SELECT lid
+		FROM house_user
+		WHERE `hid`=#{hid}
+		),#{address},#{time})
+	</insert>
+	<!--	//	管理员批准，-->
+	<!--	int Apply();-->
+
+	<!--	//	学生查看申请结果-->
+	<!--	List<Meet> getApplySource(Integer tid);-->
+
+	<!--	//	学生申请查看正在审核的数据-->
+	<!--	List<Meet> getApplying(Integer tid);-->
+
+	<!--	//房主查看已经申请通过后的会面时间地点-->
+	<!--	List<Meet> getApplyLandlord(Integer lid);-->
+
+	<!--	//	管理员查看所有申请-->
+	<!--	List<Meet> getAllApply(String enabled_zh);-->
+</mapper>

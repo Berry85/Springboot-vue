@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.example.demo.mapper.HouseMapper">
+	<resultMap id = "BaseResultMap" type = "com.example.demo.entity.House">
+		<id column = "id" property = "id" jdbcType = "INTEGER"/>
+		<result column = "address" property = "address" jdbcType = "VARCHAR"/>
+		<result column = "status" property = "status" jdbcType = "VARCHAR"/>
+		<result column = "area" property = "area" jdbcType = "DOUBLE"/>
+		<result column = "price" property = "price" jdbcType = "DOUBLE"/>
+		<result column = "UploadDate" property = "UploadDate" jdbcType = "DATE"/>
+		<result column = "lid" property = "lid" jdbcType = "INTEGER"/>
+	</resultMap>
+	<!--	//查询所有房屋-->
+	<!--	List<House> getAllHouse();-->
+
+	<select id = "getAllHouse" resultMap = "BaseResultMap">
+		SELECT *
+		FROM house
+	</select>
+	<!--	//	查询自己拥有的房屋-->
+	<!--		int getUserHouse(Integer lid);-->
+	<select id = "getUserHouse" resultMap = "BaseResultMap">
+		SELECT h.*
+		FROM house h
+		WHERE h.`lid`=#{lid}
+	</select>
+	<!--	//	新增房屋-->
+	<!--	int addHouse(@Param("house") House house, @Param("lid") Integer lid);-->
+	<insert id = "addHouse">
+		INSERT INTO house
+		SET address=#{house.address},status=#{house.status},
+		area=#{house.area},price=#{house.price},lid=#{lid}
+	</insert>
+
+
+	<!--	//	修改房屋-->
+	<!--	int EditHouse(House house);-->
+	<update id = "EditHouse">
+		UPDATE house
+		<set>
+			<if test = "address!=null">
+				address=#{address,jdbcType="VARCHAR"},
+			</if>
+			<if test = "status!=null">
+				status=#{status,jdbcType="VARCHAR"},
+			</if>
+			<if test = "area!=null">
+				area=#{area,jdbcType="INTEGER"},
+			</if>
+			<if test = "price!=null">
+				price=#{price,jdbcType="DOUBLE"},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<!--	//	删除房屋-->
+	<!--	int DeleteHouse(Integer hid);-->
+	<delete id = "DeleteHouse">
+		DELETE house WHERE house.id=#{hid}
+	</delete>
+</mapper>
