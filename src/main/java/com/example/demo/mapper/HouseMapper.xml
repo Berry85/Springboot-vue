@@ -60,4 +60,12 @@
 	<delete id = "DeleteHouse">
 		DELETE house WHERE house.id=#{hid}
 	</delete>
+
+	<!--	//	根据房屋id找到房主id-->
+	<!--	int FindLandlord(Integer hid);-->
+	<select id = "FindLandlord" resultMap = "BaseResultMap">
+		SELECT *
+		FROM house
+		WHERE hid=#{hid}
+	</select>
 </mapper>

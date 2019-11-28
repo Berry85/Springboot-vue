@@ -3,6 +3,8 @@ package com.example.demo.controller.user;
 import com.example.demo.common.UserUtils;
 import com.example.demo.entity.RespBean;
 import com.example.demo.entity.User;
+import com.example.demo.service.HouseService;
+import com.example.demo.service.MeetService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TenantController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	MeetService meetService;
+	@Autowired
+	HouseService houseService;
 
 	//查看个人信息
 	@RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
@@ -34,8 +40,16 @@ public class TenantController {
 
 	//见面申请
 	@RequestMapping(value = "/meet", method = RequestMethod.POST)
-	public RespBean meet() {
-		return RespBean.ok("a");
+	public RespBean meet(Integer hid) {
+		int lid = houseService.FindLandlord(hid).getLid();
+		int tid = UserUtils.getCurrentUser().getId();
+		int i = meetService.Applymeet(lid, tid);
+		if (i == 1) {
+			return RespBean.ok("申请成功");
+		} else {
+			return RespBean.error("申请失败");
+		}
+
 	}
 
 	//租屋合同

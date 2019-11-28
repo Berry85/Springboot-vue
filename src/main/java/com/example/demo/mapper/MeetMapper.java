@@ -3,14 +3,15 @@ package com.example.demo.mapper;
 import com.example.demo.entity.Meet;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MeetMapper {
-	//	学生申请会面时间地点
-	int Applymeet(@Param("meet") Meet meet, @Param("hid") Integer hid, @Param("tid") Integer tid);
+	//	学生申请会面时间地点,地点为房屋地址，时间管理员定下来，
+	int Applymeet(@Param("lid") Integer lid, @Param("tid") Integer tid);
 
 	//	管理员批准，
-	int Apply();
+	int Apply(@Param("id") Integer id, @Param("address") String address, @Param("time") Date time);
 
 	//	学生查看申请结果
 	List<Meet> getApplySource(Integer tid);
@@ -22,6 +23,6 @@ public interface MeetMapper {
 	List<Meet> getApplyLandlord(Integer lid);
 
 	//	管理员查看所有申请
-	List<Meet> getAllApply(String enabled_zh);
+	List<Meet> getAllApply(Integer enable);
 
 }

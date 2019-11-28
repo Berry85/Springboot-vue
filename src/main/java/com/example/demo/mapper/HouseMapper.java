@@ -23,4 +23,7 @@ public interface HouseMapper {
 
 	//	删除房屋
 	int DeleteHouse(Integer hid);
+
+	//	根据房屋id找到房主id
+	House FindLandlord(Integer hid);
 }

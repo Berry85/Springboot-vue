@@ -37,4 +37,9 @@ public class HouseService {
 	public int DeleteHouse(Integer hid) {
 		return houseMapper.DeleteHouse(hid);
 	}
+
+	//	根据房屋id找到房主id
+	public House FindLandlord(Integer hid) {
+		return houseMapper.FindLandlord(hid);
+	}
 }
