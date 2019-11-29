@@ -1,4 +1,4 @@
-package com.example.demo.controller.user;
+package com.example.demo.controller;
 
 import com.example.demo.common.UserUtils;
 import com.example.demo.entity.RespBean;
