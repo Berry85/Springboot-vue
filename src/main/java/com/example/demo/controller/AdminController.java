@@ -20,29 +20,21 @@ public class AdminController {
 	@Autowired
 	HouseService houseService;
 
+	//	获取房东列表
 	@RequestMapping(value = "/landlord_list", method = RequestMethod.GET)
 	public List<User> landlord_list() {
 		return userService.getAllLandlord();
 	}
 
+	//	获取租客列表
 	@RequestMapping(value = "/tenant_list", method = RequestMethod.GET)
 	public List<User> tenant_list() {
 		return userService.getAllTenant();
 	}
 
-
-	@RequestMapping(value = "/tenantlocked", method = RequestMethod.POST)
+	//上锁用户
+	@RequestMapping(value = "/locked", method = RequestMethod.POST)
 	public RespBean TenantLock(Integer uid) {
-		int i = userService.lockedUser(uid);
-		if (i == 1) {
-			return RespBean.ok("已锁");
-		} else {
-			return RespBean.error("上锁失败");
-		}
-	}
-
-	@RequestMapping(value = "/landlordlocked", method = RequestMethod.POST)
-	public RespBean LandlordLock(Integer uid) {
 		int i = userService.lockedUser(uid);
 		if (i == 1) {
 			return RespBean.ok("已锁");

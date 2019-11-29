@@ -2,9 +2,11 @@ package com.example.demo.controller.user;
 
 import com.example.demo.common.UserUtils;
 import com.example.demo.entity.House;
+import com.example.demo.entity.Meet;
 import com.example.demo.entity.RespBean;
 import com.example.demo.entity.User;
 import com.example.demo.service.HouseService;
+import com.example.demo.service.MeetService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ public class LandlordController {
 	UserService userService;
 	@Autowired
 	HouseService houseService;
+	@Autowired
+	MeetService meetService;
 
 	//查看个人信息
 	@RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
@@ -28,7 +32,7 @@ public class LandlordController {
 	}
 
 	//更新个人信息
-	@RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
 	public RespBean updateInfo(User user) {
 		if (userService.updateUser(user) == 1) {
 			return RespBean.error("更新成功");
@@ -39,8 +43,8 @@ public class LandlordController {
 
 	//见面查看
 	@RequestMapping(value = "/meet", method = RequestMethod.GET)
-	public RespBean meet() {
-		return RespBean.ok("a");
+	public List<Meet> meet() {
+		return meetService.getApplyLandlord(UserUtils.getCurrentUser().getId());
 	}
 
 	//租屋信息查看
@@ -50,7 +54,6 @@ public class LandlordController {
 	}
 
 	//	租屋新增
-
 	@RequestMapping(value = "/house/insert", method = RequestMethod.POST)
 	public RespBean HouseInsert(House house) {
 		Integer lid = UserUtils.getCurrentUser().getId();
