@@ -33,14 +33,24 @@ public class MeetService {
 		return meetMapper.getApplying(tid);
 	}
 
+	//	学生申请查看未通过的数据-->
+	public List<Meet> getApplied(Integer tid) {
+		return meetMapper.getApplied(tid);
+	}
+
 	//房主查看已经申请通过后的会面时间地点
 	public List<Meet> getApplyLandlord(Integer lid) {
 		return meetMapper.getApplyLandlord(lid);
 	}
 
+	//	管理员查看未审批的申请
+	public List<Meet> getApplyEnable() {
+		return meetMapper.getApplyEnable();
+	}
+
 	//	管理员查看所有申请
-	public List<Meet> getAllApply(Integer enable) {
-		return meetMapper.getAllApply(enable);
+	public List<Meet> getAllApply() {
+		return meetMapper.getAllApply();
 	}
 
 }

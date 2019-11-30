@@ -10,7 +10,16 @@
 		<result column = "time" property = "time" jdbcType = "DATE"/>
 		<result column = "enable" property = "enable" jdbcType = "INTEGER"/>
 	</resultMap>
-	<!--	//	学生申请会面时间地点,地点为房屋地址，时间管理员定下来，-->
+
+	<resultMap id = "LoadName" type = "com.example.demo.entity.Meet" extends = "BaseResultMap">
+		<collection property = "name" javaType = "com.example.demo.entity.MeetName">
+			<result column = "tid" property = "id" jdbcType = "INTEGER"/>
+			<result column = "t_name" property = "name" jdbcType = "VARCHAR"/>
+			<result column = "lid" property = "id" jdbcType = "INTEGER"/>
+			<result column = "l_name" property = "name" jdbcType = "VARCHAR"/>
+		</collection>
+	</resultMap>
+	<!--	//	学生申请会面时间地点，时间管理员定下来，-->
 	<!--	int Applymeet(@Param("lid")Integer lid,@Param("tid")Integer tid);-->
 	<insert id = "Applymeet">
 		INSERT INTO meet
@@ -37,6 +46,14 @@
 	<select id = "getApplying" resultMap = "BaseResultMap">
 		SELECT *
 		FROM meet
+		WHERE tid=#{tid} AND enable=null
+	</select>
+
+	<!--	//	学生申请查看未通过的数据-->
+	<!--	List<Meet> getApplied(Integer tid);-->
+	<select id = "getApplied" resultMap = "BaseResultMap">
+		SELECT *
+		FROM meet
 		WHERE tid=#{tid} AND enable=0
 	</select>
 	<!--	//房主查看已经申请通过后的会面时间地点-->
@@ -46,11 +63,17 @@
 		FROM meet
 		WHERE lid=#{lid} AND enable=1
 	</select>
-	<!--	//	管理员查看所有申请-->
-	<!--	List<Meet> getAllApply(Integer enable);-->
-	<select id = "getAllApply" resultMap = "BaseResultMap">
-		SELECT *
-		FROM meet
-		WHERE enable=#{enable}
+	<!--	//	管理员查看所有未审批申请-->
+	<!--	List<Meet> getApplyEnable(Integer enable);-->
+	<select id = "getApplyEnable" resultMap = "LoadName">
+		SELECT m.*,u1.`name` AS t_name,u2.`name` AS l_name
+		FROM meet m,user u1,user u2
+		WHERE m.enable=null AND u1.`id`=m.`tid` AND u2.`id`=m.`lid`
+	</select>
+	<!--管理员查看所有申请-->
+	<select id = "getAllApply" resultMap = "LoadName">
+		SELECT m.*,u1.`name` AS t_name,u2.`name` AS l_name
+		FROM meet m,user u1,user u2
+		WHERE u1.`id`=m.`tid` AND u2.`id`=m.`lid`
 	</select>
 </mapper>

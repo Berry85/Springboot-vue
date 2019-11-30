@@ -14,6 +14,9 @@ public class Meet {
 	private String address;
 	private Date time;
 	private Integer enable;
+	private User landlord;
+	private User tenant;
+	private MeetName name;
 
 	public Integer getId() {
 		return id;
@@ -68,5 +71,29 @@ public class Meet {
 
 	public void setEnable(Integer enable) {
 		this.enable = enable;
+	}
+
+	public User getLandlord() {
+		return landlord;
+	}
+
+	public void setLandlord(User landlord) {
+		this.landlord = landlord;
+	}
+
+	public User getTenant() {
+		return tenant;
+	}
+
+	public void setTenant(User tenant) {
+		this.tenant = tenant;
+	}
+
+	public MeetName getName() {
+		return name;
+	}
+
+	public void setName(MeetName name) {
+		this.name = name;
 	}
 }
