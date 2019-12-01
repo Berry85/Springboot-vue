@@ -53,7 +53,7 @@
 		FROM menu m1, menu m2
 		WHERE m1.`id` = m2.`parent_id` AND m1.`id` != 1
 		AND m2.`id` IN (
-		SELECT mr.`id`
+		SELECT mr.`mid`
 		FROM menu_role mr, user_role ur
 		WHERE ur.`rid` = mr.`rid` AND ur.`uid` = #{id})
 		AND m2.`enable` = TRUE
