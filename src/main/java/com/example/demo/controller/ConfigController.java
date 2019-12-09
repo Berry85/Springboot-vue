@@ -23,7 +23,7 @@ public class ConfigController {
 	UserService userService;
 
 
-	@RequestMapping("/sysmenu")
+	@RequestMapping(value = "/sysmenu", method = RequestMethod.GET)
 	public List<Menu> SysMenu() {
 		return menuService.getMenusByUserId();
 	}
